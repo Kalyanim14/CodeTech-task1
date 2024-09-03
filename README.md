@@ -7,7 +7,7 @@ Mentor:
 
 
 
-Overview
+**Overview**
 Class Definition and Inheritance:
 
 The program defines a Calculator class that extends JFrame and implements the ActionListener interface. This allows the class to create a window and handle user input events like button clicks.
