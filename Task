@@ -1,0 +1,157 @@
+//  note:   Name it Calculator.java inorder to run it 
+
+
+
+
+import java.awt.*;
+import java.awt.event.*;
+import javax.swing.*;
+
+public class Calculator extends JFrame implements ActionListener {
+    int num1, num2, result;
+    JTextField t1;
+    JButton[] numButtons = new JButton[10];
+    JButton add, sub, mul, div, mod, clear, eq;
+    char operation;
+    JPanel nPanel, numberPanel, operationPanel, sPanel;
+
+    public Calculator() {
+        // Setup the text field panel with a smaller size
+        nPanel = new JPanel();
+        t1 = new JTextField(10); // Reduced the number of columns
+        t1.setFont(new Font("Arial", Font.BOLD, 28)); // Slightly smaller font
+        t1.setHorizontalAlignment(JTextField.RIGHT);
+        t1.setEditable(false);
+        nPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        nPanel.add(t1);
+
+        // Setup the number panel (left side)
+        numberPanel = new JPanel();
+        numberPanel.setBackground(Color.lightGray);
+        numberPanel.setLayout(new GridLayout(4, 3, 5, 5));
+
+        for (int i = 1; i <= 9; i++) {
+            numButtons[i] = new JButton("" + i);
+            numButtons[i].setFont(new Font("Arial", Font.BOLD, 28));
+            numButtons[i].setForeground(Color.white);
+            numButtons[i].setBackground(Color.darkGray);
+            numButtons[i].addActionListener(this);
+            numberPanel.add(numButtons[i]);
+        }
+        numButtons[0] = new JButton("0");
+        numButtons[0].setFont(new Font("Arial", Font.BOLD, 28));
+        numButtons[0].setForeground(Color.white);
+        numButtons[0].setBackground(Color.darkGray);
+        numButtons[0].addActionListener(this);
+        numberPanel.add(numButtons[0]);
+
+        // Add an empty label to align the buttons
+        numberPanel.add(new JLabel());
+
+        // Setup the operation panel (right side)
+        operationPanel = new JPanel();
+        operationPanel.setLayout(new GridLayout(6, 1, 5, 5));
+
+        add = new JButton("+");
+        sub = new JButton("-");
+        mul = new JButton("*");
+        div = new JButton("/");
+        mod = new JButton("%");
+        eq = new JButton("=");
+
+        JButton[] ops = {add, sub, mul, div, mod, eq};
+        for (JButton btn : ops) {
+            btn.setFont(new Font("Arial", Font.BOLD, 28));
+            btn.setForeground(Color.white);
+            btn.setBackground(Color.blue);
+            btn.addActionListener(this);
+            operationPanel.add(btn);
+        }
+
+        // Setup the clear button separately
+        sPanel = new JPanel();
+        sPanel.setLayout(new FlowLayout(FlowLayout.CENTER));
+        sPanel.setBackground(Color.red);
+        clear = new JButton("Clear");
+        clear.setFont(new Font("Arial", Font.BOLD, 28));
+        clear.setForeground(Color.white);
+        clear.setBackground(Color.black);
+        clear.addActionListener(this);
+        sPanel.add(clear);
+
+        // Set the layout of the main frame
+        this.setLayout(new BorderLayout(10, 10));
+        add(nPanel, BorderLayout.NORTH);
+        add(numberPanel, BorderLayout.CENTER);
+        add(operationPanel, BorderLayout.EAST);
+        add(sPanel, BorderLayout.SOUTH);
+
+        // Frame settings
+        setTitle("Calculator");
+        setSize(400, 500);
+        setDefaultCloseOperation(JFrame.EXIT_ON_CLOSE);
+        setLocationRelativeTo(null); // Center the frame on the screen
+        setVisible(true);
+    }
+
+    public void actionPerformed(ActionEvent ae) {
+        String str = ae.getActionCommand();
+        char ch = str.charAt(0);
+
+        if (Character.isDigit(ch)) {
+            t1.setText(t1.getText() + str);
+        } else if (str.equals("+")) {
+            num1 = Integer.parseInt(t1.getText());
+            operation = '+';
+            t1.setText("");
+        } else if (str.equals("-")) {
+            num1 = Integer.parseInt(t1.getText());
+            operation = '-';
+            t1.setText("");
+        } else if (str.equals("*")) {
+            num1 = Integer.parseInt(t1.getText());
+            operation = '*';
+            t1.setText("");
+        } else if (str.equals("/")) {
+            num1 = Integer.parseInt(t1.getText());
+            operation = '/';
+            t1.setText("");
+        } else if (str.equals("%")) {
+            num1 = Integer.parseInt(t1.getText());
+            operation = '%';
+            t1.setText("");
+        } else if (str.equals("=")) {
+            num2 = Integer.parseInt(t1.getText());
+            switch (operation) {
+                case '+':
+                    result = num1 + num2;
+                    break;
+                case '-':
+                    result = num1 - num2;
+                    break;
+                case '*':
+                    result = num1 * num2;
+                    break;
+                case '/':
+                    try {
+                        result = num1 / num2;
+                    } catch (ArithmeticException e) {
+                        JOptionPane.showMessageDialog(this, "Division by zero is not allowed.");
+                        t1.setText("");
+                        return;
+                    }
+                    break;
+                case '%':
+                    result = num1 % num2;
+                    break;
+            }
+            t1.setText("" + result);
+        } else if (str.equals("Clear")) {
+            t1.setText("");
+        }
+    }
+
+    public static void main(String[] args) {
+        new Calculator();
+    }
+}
